@@ -1,13 +1,31 @@
 "use strict";
 
 const url = "https://dahlgren.miun.se/ramschema_ht23.php";
+const tBody = document.getElementById('tbody');
+const searchBar = document.getElementById('searchbar');
+let data = [];
 
+//Filtrera efter vad som skrivs i searchbar
+searchBar.addEventListener('keyup', (e) => {
+const searchString = e.target.value.toLowerCase();
+const filteredData = data.filter(course => {
+    return course.coursename.toLowerCase().includes(searchString) || 
+    course.code.toLowerCase().includes(searchString) || 
+    course.progression.includes(searchString);
+    
+});
 
+emptyTable();
+
+dataToTable(filteredData);
+});
+
+//Asynkron funktion innehållandes fetch-antop med try/catch
 async function loadCourses() {
   try {
     //Fetch-anrop
     const response = await fetch(url);
-    const data = await response.json();
+    data = await response.json();
 
     dataToTable(data);
 
@@ -46,7 +64,6 @@ loadCourses();
 
 
 function dataToTable(data) {
-    const tBody = document.getElementById("tbody");
 
     //Loopa igenom och skriv ut kurser till DOM
     for (let i = 0; i < data.length; i++) {
@@ -63,16 +80,6 @@ function dataToTable(data) {
 }
 
 function emptyTable() {
-    const tBody = document.getElementById("tbody");
     tBody.innerHTML = "";
 }
 
-
-
-
-
-//Vid klick på kurskod, sortera tabell
-
-//Vid klick på Namn, sortera namn
-
-//Vid klick på progression, sortera progression
