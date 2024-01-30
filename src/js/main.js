@@ -1,16 +1,38 @@
 "use strict";
 
 async function loadCourses() {
-
-//Läs in ramschema
     try {
         const response = await fetch("https://dahlgren.miun.se/ramschema_ht23.php");
-        const data = await response.json(); 
+        const data = await response.json();
+        const tbody = document.getElementById('tbody');
 
-        console.table(data);
+       //Loopa igenom och skriv ut till DOM
+
+        for (let i = 0; i < data.length; i++){
+            let row = `<tr>
+            <td>${data[i].code}</td>
+            <td>${data[i].coursename}</td>
+            <td>${data[i].progression}</td>
+            </tr>`
+
+            tbody.innerHTML += row
+        }
+
     } catch {
-        console.log("något gick fel");
+        document.getElementById("table").innerHTML = "<p>Kunde inte ladda tabell...</p>"
     }
 }
 
+
 loadCourses();
+
+
+
+//För varje kurs/objekt skriv ut till tabell
+
+//Vid klick på kurskod, sortera tabell
+
+//Vid klick på Namn, sortera namn
+
+//Vid klick på progression, sortera progression
+
